@@ -29,6 +29,7 @@ const dzisiaj = new Date().toLocaleDateString();
 const ostatniaData = localStorage.getItem("date");
 const ukonczoneBtn = document.getElementById("ukonczoneBtn");
 const historiaBtn = document.getElementById("historiaBtn");
+const resetHistoriaBtn = document.getElementById("resetHistoriaBtn");
 const list = document.getElementById("historiaList");
 
 // Funkcja pokazania przycisków ukończenia i historii
@@ -57,6 +58,8 @@ if (ostatniaData !== dzisiaj) {
 if (localStorage.getItem("ukonczone") === "true") {
   text.classList.add("ukonczone");
 }
+
+sprawdzHistorie();
 
 // Przycisk losowania wyzwania
 btn.addEventListener("click", () => {
@@ -126,6 +129,7 @@ ukonczoneBtn.addEventListener("click", () => {
     wykonaneDzisiaj.push(text.textContent);
     localStorage.setItem("wykonaneDzisiaj", JSON.stringify(wykonaneDzisiaj));
   }
+  resetHistoriaBtn.style.display = "inline";
 });
 
 // Przycisk historii
@@ -146,13 +150,15 @@ function aktualizujHistorie() {
 
   if (historia.length === 0) {
     const li = document.createElement("li");
-    li.textContent = "Brak wykonanych wyzwań dziś.";
+    li.textContent = "Dzisiejsza historia jest pusta.";
     li.style.fontStyle = "italic";
     list.appendChild(li);
   } else {
     historia.forEach(item => {
       const li = document.createElement("li");
-      li.textContent = item;
+
+      li.textContent = `${item.tekst} (${item.czas})`;
+
       list.appendChild(li);
     });
   }
@@ -161,11 +167,52 @@ function aktualizujHistorie() {
 // Funckja zapisu do historii
 function zapiszDoHistorii(wyzwanie) {
   let historia = JSON.parse(localStorage.getItem("historia")) || [];
-  historia.push(wyzwanie);
+  const teraz = new Date();
+
+  // Poprawny czas w strefie Europe/Warsaw, format 24h
+  const czas = teraz.toLocaleTimeString("pl-PL", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: "Europe/Warsaw"
+  });
+
+  const wpis = {
+    tekst: wyzwanie,
+    czas: czas
+  };
+
+  historia.push(wpis);
   localStorage.setItem("historia", JSON.stringify(historia));
 
   if (list.style.display === "block") {
     aktualizujHistorie();
+  }
+}
+
+// Przycisk wyczyszczenia historii
+resetHistoriaBtn.addEventListener("click", () => {
+  localStorage.removeItem("historia");
+
+  list.innerHTML = "";
+
+  resetHistoriaBtn.style.display = "none";
+
+  const li = document.createElement("li");
+  li.textContent = "Historia została wyczyszczona.";
+  li.style.fontStyle = "italic";
+  list.appendChild(li);
+});
+
+// Funkcja sprawdzenia czy istnieje historia dla wyczyszczenia
+function sprawdzHistorie() {
+  const historia = JSON.parse(localStorage.getItem("historia")) || [];
+
+  if (historia.length === 0) {
+    resetHistoriaBtn.style.display = "none";
+  } else {
+    resetHistoriaBtn.style.display = "inline";
   }
 }
 

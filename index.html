@@ -12,14 +12,25 @@
         <h2>🎯 Naciśnij przycisk aby dostać swoje wyzwanie! 🥊</h2>
     </header>
     <main>
-        <button id="wylosujBtn">Wylosuj Wyzwanie!</button>
-        <p id="wyzwanieText"></p>
-        <button id="ukonczoneBtn" style="display: none;">Ukończone!</button>
-        <button id="historiaBtn" style="display: none;">Pokaż historię</button>
-        <ul id="historiaList"></ul>
+        <div class="pudelko">
+            <button id="wylosujBtn">Wylosuj Wyzwanie!</button>
+            <p id="wyzwanieText"></p>
+            <button id="ukonczoneBtn" style="display: none;">Ukończone!</button>
+            <button id="historiaBtn" style="display: none;">Pokaż historię</button>
+            <ul id="historiaList" style="display: none;"></ul>
+            <button id="resetHistoriaBtn" style="display: none;">Wyczyść historię</button>
+        </div>
     </main>
     <footer>
+        <div class="ftop">
         <p>Strona stworzona przez: Michał Pięta</p>
+        <img src="Spade_Transparent.png" alt="spade" style="height: 50px;">
+        </div>
+        <div class="fbot">
+            <p><a href="hallo">Polityka Prywatności</a></p>
+            <p><a href="hallo">Regulamin Strony</a></p>
+            <p><a href="hallo">Kontakt</a></p>
+        </div>
     </footer>
     <script src="script.js"></script>
 </body>
